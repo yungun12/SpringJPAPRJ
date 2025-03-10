@@ -22,19 +22,19 @@ public class NoticeService implements INoticeService {
 
     // RequiredArgsConstructor 어노테이션으로 생성자를 자동 생성함
     // noticeRepository 변수에 이미 메모리에 올라간 NoticeRepository 객체를 넣어줌
-    // 예전에는 autowired 어노테이션을 통해 설정했지만 이제는 생성자를 통해 객체를 주입함
-
+    // 예전에는 autowired 어노테이션를 통해 설정했었지만, 이젠 생성자를 통해 객체 주입함
     private final NoticeRepository noticeRepository;
 
     @Override
     public List<NoticeDTO> getNoticeList() {
 
-        log.info("{}.getNoticeList Start!", this.getClass().getName());
+        log.
+                info("{}.getNoticeList Start!", this.getClass().getName());
 
         // 공지사항 전체 리스트 조회하기
         List<NoticeEntity> rList = noticeRepository.findAllByOrderByNoticeSeqDesc();
 
-        // Entity의 값들을 DTO에 맞게 넣어주기
+        // 엔티티의 값들을 DTO에 맞게 넣어주기
         List<NoticeDTO> nList = new ObjectMapper().convertValue(rList,
                 new TypeReference<>() {
                 });
@@ -54,18 +54,19 @@ public class NoticeService implements INoticeService {
             // 조회수 증가하기
             int res = noticeRepository.updateReadCnt(pDTO.noticeSeq());
 
-            // 조회수 증가 성공야부 체크
-            log.info("res : {}", res);
+            // 조회수 증가 성공여부 체크
+            log.
+                    info("res : {}", res);
         }
-
 
         // 공지사항 상세내역 가져오기
         NoticeEntity rEntity = noticeRepository.findByNoticeSeq(pDTO.noticeSeq());
 
-        // Entity의 값들을 DTO에 맞게 넣어주기
+        // 엔티티의 값들을 DTO에 맞게 넣어주기
         NoticeDTO rDTO = new ObjectMapper().convertValue(rEntity, NoticeDTO.class);
 
-        log.info("{}.getNoticeInfo End!", this.getClass().getName());
+        log.
+                info("{}.getNoticeInfo End!", this.getClass().getName());
 
         return rDTO;
     }
@@ -83,13 +84,12 @@ public class NoticeService implements INoticeService {
         String contents = CmmUtil.nvl(pDTO.contents());
         String userId = CmmUtil.nvl(pDTO.userId());
 
-        log.info("noticeSeq: {}, title: {}, noticeYn: {}, contents: {}, userId: {}",
-                noticeSeq, title, noticeYn, contents, userId);
+        log.info("title: {}, noticeYn: {}, contents: {}, userId: {}", title, noticeYn, contents, userId);
 
         // 현재 공지사항 조회수 가져오기
         NoticeEntity rEntity = noticeRepository.findByNoticeSeq(noticeSeq);
 
-        // 수정할 값들을 빌더를 통하여 Entity에 저장하기
+        // 수정할 값들을 빌더를 통해 엔티티에 저장하기
         NoticeEntity pEntity = NoticeEntity.builder()
                 .noticeSeq(noticeSeq).title(title).noticeYn(noticeYn).contents(contents).userId(userId)
                 .readCnt(rEntity.getReadCnt())
@@ -109,10 +109,11 @@ public class NoticeService implements INoticeService {
 
         Long noticeSeq = pDTO.noticeSeq();
 
-        log.info("noticeSeq: {}", noticeSeq);
+        log.info("noticeSeq : {}", noticeSeq);
 
-        // 데이터 삭제하기, JPA 기본 제공하는 함수 사용
+        // 데이터 수정하기
         noticeRepository.deleteById(noticeSeq);
+
 
         log.info("{}.deleteNoticeInfo End!", this.getClass().getName());
     }
@@ -120,19 +121,19 @@ public class NoticeService implements INoticeService {
     @Override
     public void insertNoticeInfo(NoticeDTO pDTO) throws Exception {
 
-        log.info("{}.insertNoticeInfo Start!", this.getClass().getName());
+        log.info("{}.InsertNoticeInfo Start!", this.getClass().getName());
 
         String title = CmmUtil.nvl(pDTO.title());
         String noticeYn = CmmUtil.nvl(pDTO.noticeYn());
         String contents = CmmUtil.nvl(pDTO.contents());
         String userId = CmmUtil.nvl(pDTO.userId());
 
-        log.info("pDTO : {}", pDTO); // Record 타입은 @ToString 기본 제공
+        log.info("title: {}, noticeYn: {}, contents: {}, userId: {}", title, noticeYn, contents, userId);
 
         // 공지사항 저장을 위해서는 PK 값은 빌더에 추가하지 않는다.
-        // JPA에 자동 증가 설정을 해놓았기 때문에
+        // JPA에 자동 증가 설정을 해놨음
         NoticeEntity pEntity = NoticeEntity.builder()
-                .title(title).noticeYn(noticeYn).contents(contents).userId(userId).readCnt(OL)
+                .title(title).noticeYn(noticeYn).contents(contents).userId(userId).readCnt(0L)
                 .regId(userId).regDt(DateUtil.getDateTime("yyyy-MM-dd hh:mm:ss"))
                 .chgId(userId).chgDt(DateUtil.getDateTime("yyyy-MM-dd hh:mm:ss"))
                 .build();
@@ -140,7 +141,7 @@ public class NoticeService implements INoticeService {
         // 공지사항 저장하기
         noticeRepository.save(pEntity);
 
-        log.info("{}.insertNoticeInfo End!", this.getClass().getName());
+        log.info("{}.InsertNoticeInfo End!", this.getClass().getName());
 
     }
 }
