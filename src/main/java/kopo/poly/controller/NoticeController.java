@@ -6,16 +6,15 @@ import kopo.poly.dto.MsgDTO;
 import kopo.poly.dto.NoticeDTO;
 import kopo.poly.service.INoticeService;
 import kopo.poly.util.CmmUtil;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -118,10 +117,8 @@ public class NoticeController {
              * 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함 반드시 작성할 것
              * ####################################################################################
              */
-            log.info("session user_id : {}", userId);
-            log.info("title : {}", title);
-            log.info("noticeYn : {}", noticeYn);
-            log.info("contents : {}", contents);
+            log.info("session user_id: {}, title: {}, noticeYn: {}, contents: {}", userId, title, noticeYn, contents);
+
 
             // 데이터 저장하기 위해 DTO에 저장하기
             NoticeDTO pDTO = NoticeDTO.builder().userId(userId).title(title)
@@ -155,11 +152,9 @@ public class NoticeController {
      * 게시판 상세보기
      */
     @GetMapping(value = "noticeInfo")
-    public String noticeInfo(HttpServletRequest request, ModelMap model) throws Exception {
+    public String noticeInfo(@RequestParam @NonNull String nSeq, ModelMap model) throws Exception {
 
         log.info("{}.noticeInfo Start!", this.getClass().getName());
-
-        String nSeq = CmmUtil.nvl(request.getParameter("nSeq"), "0"); // 공지글번호(PK)
 
         /*
          * ####################################################################################
@@ -180,7 +175,6 @@ public class NoticeController {
 
         // 조회된 리스트 결과값 넣어주기
         model.addAttribute("rDTO", rDTO);
-
 
         log.info("{}.noticeInfo End!", this.getClass().getName());
 
@@ -245,11 +239,8 @@ public class NoticeController {
              * 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함 반드시 작성할 것
              * ####################################################################################
              */
-            log.info("userId : {}", userId);
-            log.info("nSeq : {}", nSeq);
-            log.info("title : {}", title);
-            log.info("noticeYn : {}", noticeYn);
-            log.info("contents : {}", contents);
+            log.info("userId: {}, nSeq: {}, title: {}, noticeYn: {}, contents: {}",
+                    userId, nSeq, title, noticeYn, contents);
 
             /*
              * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
@@ -283,7 +274,7 @@ public class NoticeController {
      */
     @ResponseBody
     @PostMapping(value = "noticeDelete")
-    public MsgDTO noticeDelete(HttpServletRequest request) {
+    public MsgDTO noticeDelete(@RequestParam @NonNull String nSeq) {
 
         log.info("{}.noticeDelete Start!", this.getClass().getName());
 
@@ -291,8 +282,6 @@ public class NoticeController {
         MsgDTO dto; // 결과 메시지 구조
 
         try {
-            String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 글번호(PK)
-
             /*
              * ####################################################################################
              * 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함 반드시 작성할 것

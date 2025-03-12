@@ -12,9 +12,8 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicInsert
 @DynamicUpdate
 @Builder
-@Cacheable
 @Entity
-public class NoticeEntity {
+public class NoticeFetchEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,8 +51,7 @@ public class NoticeEntity {
     @Column(name = "chg_dt")
     private String chgDt;
 
-    @Version
-    @Column(name = "version", nullable = false)
-    private Integer version = 0; // 기본값 설정
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private UserInfoEntity userInfo;
 }

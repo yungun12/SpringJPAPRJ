@@ -14,7 +14,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Builder
 @Cacheable
 @Entity
-public class NoticeEntity {
+public class NoticeSQLEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,8 +52,7 @@ public class NoticeEntity {
     @Column(name = "chg_dt")
     private String chgDt;
 
-    @Version
-    @Column(name = "version", nullable = false)
-    private Integer version = 0; // 기본값 설정
+    @Column(name = "user_name") // NativeQuery 결과를 저장하기 위한 변수
+    private String userName;
 
 }

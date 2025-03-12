@@ -28,8 +28,7 @@ public class NoticeService implements INoticeService {
     @Override
     public List<NoticeDTO> getNoticeList() {
 
-        log.
-                info("{}.getNoticeList Start!", this.getClass().getName());
+        log.info("{}.getNoticeList Start!", this.getClass().getName());
 
         // 공지사항 전체 리스트 조회하기
         List<NoticeEntity> rList = noticeRepository.findAllByOrderByNoticeSeqDesc();
@@ -55,8 +54,7 @@ public class NoticeService implements INoticeService {
             int res = noticeRepository.updateReadCnt(pDTO.noticeSeq());
 
             // 조회수 증가 성공여부 체크
-            log.
-                    info("res : {}", res);
+            log.info("res : {}", res);
         }
 
         // 공지사항 상세내역 가져오기
@@ -65,8 +63,7 @@ public class NoticeService implements INoticeService {
         // 엔티티의 값들을 DTO에 맞게 넣어주기
         NoticeDTO rDTO = new ObjectMapper().convertValue(rEntity, NoticeDTO.class);
 
-        log.
-                info("{}.getNoticeInfo End!", this.getClass().getName());
+        log.info("{}.getNoticeInfo End!", this.getClass().getName());
 
         return rDTO;
     }
@@ -84,7 +81,7 @@ public class NoticeService implements INoticeService {
         String contents = CmmUtil.nvl(pDTO.contents());
         String userId = CmmUtil.nvl(pDTO.userId());
 
-        log.info("title: {}, noticeYn: {}, contents: {}, userId: {}", title, noticeYn, contents, userId);
+        log.info("pDTO : {}", pDTO); // Record 타입은 @ToString 기본 제공
 
         // 현재 공지사항 조회수 가져오기
         NoticeEntity rEntity = noticeRepository.findByNoticeSeq(noticeSeq);
@@ -93,6 +90,7 @@ public class NoticeService implements INoticeService {
         NoticeEntity pEntity = NoticeEntity.builder()
                 .noticeSeq(noticeSeq).title(title).noticeYn(noticeYn).contents(contents).userId(userId)
                 .readCnt(rEntity.getReadCnt())
+                .version(rEntity.getVersion())
                 .build();
 
         // 데이터 수정하기
@@ -111,7 +109,7 @@ public class NoticeService implements INoticeService {
 
         log.info("noticeSeq : {}", noticeSeq);
 
-        // 데이터 수정하기
+        // 데이터 삭제하기, JPA 기본 제공하는 함수 사용
         noticeRepository.deleteById(noticeSeq);
 
 
@@ -128,7 +126,7 @@ public class NoticeService implements INoticeService {
         String contents = CmmUtil.nvl(pDTO.contents());
         String userId = CmmUtil.nvl(pDTO.userId());
 
-        log.info("title: {}, noticeYn: {}, contents: {}, userId: {}", title, noticeYn, contents, userId);
+        log.info("pDTO : {}", pDTO); // Record 타입은 @ToString 기본 제공
 
         // 공지사항 저장을 위해서는 PK 값은 빌더에 추가하지 않는다.
         // JPA에 자동 증가 설정을 해놨음
