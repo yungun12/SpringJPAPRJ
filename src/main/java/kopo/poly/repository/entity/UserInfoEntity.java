@@ -38,23 +38,22 @@ public class UserInfoEntity implements Serializable {
     @Column(name = "addr1", nullable = false)
     private String addr1;
 
-    @NonNull
     @Column(name = "addr2", nullable = false)
     private String addr2;
 
-    @Column(name = "reg_id", nullable = false)
+    @Column(name = "reg_id", updatable = false)
     private String regId;
 
-    @Column(name = "reg_dt", nullable = false)
+    @Column(name = "reg_dt", updatable = false)
     private String regDt;
 
-    @Column(name = "chg_id", nullable = false)
+    @Column(name = "chg_id")
     private String chgId;
 
-    @Column(name = "chg_dt", nullable = false)
+    @Column(name = "chg_dt")
     private String chgDt;
 
-    @Column(name = "roles") // 권한 데이터는 ,를 구분자로 여러 개(예 : 관리자, 일반사용자) 정의 가능함
+    @Column(name = "roles") //권한 데이터는 ,를 구분자로 여러 개(예 : 관리자, 일반사용자) 정의 가능함
     private String roles;
 
 }
