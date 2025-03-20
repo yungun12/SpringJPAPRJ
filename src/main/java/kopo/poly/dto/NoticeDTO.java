@@ -4,6 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record NoticeDTO(
+
         Long noticeSeq,    // 기본키, 순번
         String title,      // 제목
         String noticeYn,   // 공지글 여부

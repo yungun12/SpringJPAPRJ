@@ -1,5 +1,6 @@
 package kopo.poly.service.impl;
 
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -25,14 +26,17 @@ import java.util.List;
 @Service
 public class NoticeJoinService implements INoticeJoinService {
 
-    private final NoticeSQLRepository noticeSQLRepository; // NativeQuery 사용을 위한 Repository
+    private final NoticeRepository noticeRepository; // @JoinColumn 적용된 공지사항
 
     private final NoticeJoinRepository noticeJoinRepository; // @JoinColumn 적용된 공지사항
+
+    private final NoticeSQLRepository noticeSQLRepository; // NativeQuery 사용을 위한 Repository
 
     private final NoticeFetchRepository noticeFetchRepository; // JPQL 사용을 위한 Repository
 
     private final JPAQueryFactory queryFactory; // QueryDSL 사용을 위한 객체 가져오기
 
+    @Transactional
     @Override
     public List<NoticeDTO> getNoticeListUsingJoinColumn() {
         log.info(this.getClass().getName() + ".getNoticeListUsingJoinColumn Start!");
@@ -92,6 +96,7 @@ public class NoticeJoinService implements INoticeJoinService {
         return nList;
     }
 
+
     @Override
     public List<NoticeDTO> getNoticeListUsingJPQL() {
         log.info(this.getClass().getName() + ".getNoticeListUsingJPQL Start!");
@@ -119,7 +124,7 @@ public class NoticeJoinService implements INoticeJoinService {
 
     @Transactional
     @Override
-    public List<NoticeDTO> getNoticeListForQueryDSL() {
+    public List<NoticeDTO> getNoticeListQueryDSL() {
         log.info(this.getClass().getName() + ".getNoticeListForQueryDSL Start!");
 
         // QueryDSL 라이브러리를 추가하면, JPA 엔티티들은 Q붙여서 QueryDSL에서 처리가능한 객체를 생성함

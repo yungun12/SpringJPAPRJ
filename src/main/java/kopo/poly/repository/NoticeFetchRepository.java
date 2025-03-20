@@ -16,4 +16,5 @@ public interface NoticeFetchRepository extends JpaRepository<NoticeJoinEntity, L
      */
     @Query("SELECT A FROM NoticeFetchEntity A JOIN FETCH A.userInfo ORDER BY A.noticeYn desc , A.noticeSeq DESC")
     List<NoticeFetchEntity> getListFetchJoin();
+
 }

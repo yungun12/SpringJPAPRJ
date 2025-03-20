@@ -1,9 +1,10 @@
 package kopo.poly.repository.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import jakarta.persistence.*;
 
 @Getter
 @NoArgsConstructor
